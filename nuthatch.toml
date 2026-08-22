@@ -28,3 +28,33 @@ event = "PoolCreated"
 child_param = "pool"
 template = "pool"
 start = 165
+
+# The one read the chain will not give up in a log. `PoolCreated` carries token0, token1 and fee in
+# its topics, so those need no call - but the *tokens* it names are contracts this nest never
+# declares, and `nuthatch metadata fetch` only walks `[[contracts]]`. The subgraph's own
+# `fetchTokenSymbol`/`fetchTokenDecimals` do exactly this, once per new pool, and so do we:
+# `contract_column` takes the address from the row the factory just produced, and the call is pinned
+# at that row's block. Needs `--state-rpc <archive>`; a pruned endpoint cannot answer it.
+[[calls]]
+name = "token0_symbol"
+on = "factory__pool_created"
+contract_column = "{token0}"
+signature = "symbol()"
+
+[[calls]]
+name = "token0_decimals"
+on = "factory__pool_created"
+contract_column = "{token0}"
+signature = "decimals()"
+
+[[calls]]
+name = "token1_symbol"
+on = "factory__pool_created"
+contract_column = "{token1}"
+signature = "symbol()"
+
+[[calls]]
+name = "token1_decimals"
+on = "factory__pool_created"
+contract_column = "{token1}"
+signature = "decimals()"

@@ -1,6 +1,6 @@
-# semantic.toml — what this nest's data *means* (RFC-0016). Read by the MCP `schema`
+# semantic.toml - what this nest's data *means* (RFC-0016). Read by the MCP `schema`
 # tool, the admin UI, and the scaffolded skill. Edit descriptions freely; the
-# `[table.*.footguns]` are DERIVED from the ABI and regenerated — leave them be.
+# `[table.*.footguns]` are DERIVED from the ABI and regenerated - leave them be.
 
 schema_version = 1
 
@@ -49,6 +49,10 @@ tickUpper = "The `tickUpper` int24 parameter. (seeded from the ABI — edit sema
 [table.pool__burn.footguns]
 big_ints = [
     "amount",
+    "amount0",
+    "amount1",
+]
+overflows_dec = [
     "amount0",
     "amount1",
 ]
@@ -106,6 +110,12 @@ big_ints = [
     "paid0",
     "paid1",
 ]
+overflows_dec = [
+    "amount0",
+    "amount1",
+    "paid0",
+    "paid1",
+]
 
 [table.pool__increase_observation_cardinality_next]
 description = "`IncreaseObservationCardinalityNext(uint16,uint16)` events emitted by the `pool` contract. (seeded from the ABI — edit semantic.toml to improve this)"
@@ -125,6 +135,7 @@ tick = "The `tick` int24 parameter. (seeded from the ABI — edit semantic.toml 
 
 [table.pool__initialize.footguns]
 big_ints = ["sqrtPriceX96"]
+overflows_dec = ["sqrtPriceX96"]
 
 [table.pool__mint]
 description = "`Mint(address,address,int24,int24,uint128,uint256,uint256)` events emitted by the `pool` contract. (seeded from the ABI — edit semantic.toml to improve this)"
@@ -142,6 +153,10 @@ tickUpper = "The `tickUpper` int24 parameter. (seeded from the ABI — edit sema
 [table.pool__mint.footguns]
 big_ints = [
     "amount",
+    "amount0",
+    "amount1",
+]
+overflows_dec = [
     "amount0",
     "amount1",
 ]
@@ -176,6 +191,63 @@ big_ints = [
     "sqrtPriceX96",
     "liquidity",
 ]
+overflows_dec = [
+    "amount0",
+    "amount1",
+    "sqrtPriceX96",
+]
+
+[table.token0_decimals]
+description = "`decimals()` on each new pool's `token0`, called once per `factory__pool_created` row and pinned at that row's block. `result` is a single 32-byte word whose last byte is the value; the `token_metadata` view decodes it."
+grain = "one row per PoolCreated, keyed by the token0 address in the implicit `address` column"
+
+[table.token0_decimals.columns]
+calldata = "The exact calldata sent, including the 4-byte selector - the question this row answers."
+content_address = "Content address of the (chain, block, contract, calldata) tuple: the same question at the same block always has this key, so two operators re-executing agree byte for byte."
+result = "Raw ABI return bytes, lowercase 0x. Decode it in a view rather than at read time; `token_metadata` does."
+reverted = "The `reverted` bool parameter - stored as exact text `'true'`/`'false'`, not a SQL boolean. `reverted = true` and `AND`/`NOT` implicitly cast and work; `COALESCE`, `CASE`, `bool_and`/`bool_or` and `UNION` do not. Write `reverted = 'true'` or `CAST(reverted AS BOOLEAN)`. (seeded from the ABI - edit semantic.toml to improve this)"
+
+[table.token0_decimals.footguns]
+bools = ["reverted"]
+
+[table.token0_symbol]
+description = "`symbol()` on each new pool's `token0`, called once per `factory__pool_created` row and pinned at that row's block (RFC-0023 tier 3). `result` is the raw ABI return: usually an encoded dynamic `string`, occasionally a `bytes32`. The `token_metadata` view decodes both."
+grain = "one row per PoolCreated, keyed by the token0 address in the implicit `address` column"
+
+[table.token0_symbol.columns]
+calldata = "The exact calldata sent, including the 4-byte selector - the question this row answers."
+content_address = "Content address of the (chain, block, contract, calldata) tuple: the same question at the same block always has this key, so two operators re-executing agree byte for byte."
+result = "Raw ABI return bytes, lowercase 0x. Decode it in a view rather than at read time; `token_metadata` does."
+reverted = "The `reverted` bool parameter - stored as exact text `'true'`/`'false'`, not a SQL boolean. `reverted = true` and `AND`/`NOT` implicitly cast and work; `COALESCE`, `CASE`, `bool_and`/`bool_or` and `UNION` do not. Write `reverted = 'true'` or `CAST(reverted AS BOOLEAN)`. (seeded from the ABI - edit semantic.toml to improve this)"
+
+[table.token0_symbol.footguns]
+bools = ["reverted"]
+
+[table.token1_decimals]
+description = "`decimals()` on each new pool's `token1` - the token1 half of the pair, otherwise identical to `token0_decimals`."
+grain = "one row per PoolCreated, keyed by the token1 address in the implicit `address` column"
+
+[table.token1_decimals.columns]
+calldata = "The exact calldata sent, including the 4-byte selector - the question this row answers."
+content_address = "Content address of the (chain, block, contract, calldata) tuple: the same question at the same block always has this key, so two operators re-executing agree byte for byte."
+result = "Raw ABI return bytes, lowercase 0x. Decode it in a view rather than at read time; `token_metadata` does."
+reverted = "The `reverted` bool parameter - stored as exact text `'true'`/`'false'`, not a SQL boolean. `reverted = true` and `AND`/`NOT` implicitly cast and work; `COALESCE`, `CASE`, `bool_and`/`bool_or` and `UNION` do not. Write `reverted = 'true'` or `CAST(reverted AS BOOLEAN)`. (seeded from the ABI - edit semantic.toml to improve this)"
+
+[table.token1_decimals.footguns]
+bools = ["reverted"]
+
+[table.token1_symbol]
+description = "`symbol()` on each new pool's `token1` - the token1 half of the pair, otherwise identical to `token0_symbol`."
+grain = "one row per PoolCreated, keyed by the token1 address in the implicit `address` column"
+
+[table.token1_symbol.columns]
+calldata = "The exact calldata sent, including the 4-byte selector - the question this row answers."
+content_address = "Content address of the (chain, block, contract, calldata) tuple: the same question at the same block always has this key, so two operators re-executing agree byte for byte."
+result = "Raw ABI return bytes, lowercase 0x. Decode it in a view rather than at read time; `token_metadata` does."
+reverted = "The `reverted` bool parameter - stored as exact text `'true'`/`'false'`, not a SQL boolean. `reverted = true` and `AND`/`NOT` implicitly cast and work; `COALESCE`, `CASE`, `bool_and`/`bool_or` and `UNION` do not. Write `reverted = 'true'` or `CAST(reverted AS BOOLEAN)`. (seeded from the ABI - edit semantic.toml to improve this)"
+
+[table.token1_symbol.footguns]
+bools = ["reverted"]
 
 [view.global]
 description = "One-row network summary: pools, distinct tokens, total swaps/mints/burns, and pools-with-swaps. The header-panel numbers, all from one factory rule and a handful of SQL views."
@@ -192,5 +264,8 @@ description = "The pool registry — one row per pool the factory created (token
 [view.swaps]
 description = "Every swap across every pool, joined to its token pair, with the post-swap price derived from sqrtPriceX96 (price = (sqrtPriceX96/2^96)^2, token1 per token0, raw units). `tick` is the post-swap tick."
 
+[view.token_metadata]
+description = "One row per token ever seen in a pool, with `symbol` and `decimals` decoded from the four `[[calls]]` tables. A token in N pools is answered N times (once per creation block); the earliest answer wins, since both values are immutable. NULL means the call reverted or returned nothing, not that the value is zero."
+
 [view.tokens]
-description = "Every token that appears in a pool, ranked by how many pools reference it (WETH/USDC sit at the top). Token symbol/decimals need a contract call and are not indexed by the declarative core — join a vendored token list for labels."
+description = "Every token that appears in a pool, with its symbol and decimals, ranked by how many pools reference it (WETH/USDC sit at the top). Symbol and decimals come from the declared `[[calls]]`, so this nest needs `--state-rpc <archive>` to run at all. `decimals` is what converts a raw `amount` into the decimal-adjusted figure a subgraph reports."
