@@ -25,6 +25,24 @@ That's the whole "dynamic data sources" story. Every pool that has ever existed 
 discovered at runtime and indexed under shared tables (`pool__swap`, `pool__mint`, …), distinguished
 by the implicit `address` column. No per-pool configuration.
 
+## The other interesting line
+
+`PoolCreated` carries `token0`, `token1` and `fee` in its topics, so those need no contract call. What
+it cannot carry is what those tokens *are*. The Uniswap subgraph's mapping calls `symbol()` and
+`decimals()` on each new pool's tokens; this nest declares the same read, and the host schedules it:
+
+```toml
+[[calls]]
+name = "token0_symbol"
+on = "factory__pool_created"   # one call per row of this table
+contract_column = "{token0}"   # …against the address that row carries
+signature = "symbol()"
+```
+
+Four such declarations (symbol and decimals, for each side of the pair) produce four tables, resolved
+at each row's own block and deduplicated before the RPC. `decimals` is the one that matters for
+correctness: it is what turns a raw `amount` into the decimal-adjusted figure a subgraph reports.
+
 ## What you get
 
 Raw event tables (`factory__pool_created`, `pool__swap`, `pool__mint`, `pool__burn`, …) plus authored
@@ -36,7 +54,8 @@ SQL **views** — the intended query surface:
 | `swaps` | every swap, joined to its pair, with the price derived from `sqrtPriceX96` |
 | `pool_stats` | per-pool swap/mint/burn counts + latest price |
 | `pool_volume` | per-pool gross volume (`sum(abs(amount))`) — the subgraph's `volumeToken0/1` |
-| `tokens` | every token, ranked by how many pools reference it |
+| `tokens` | every token, with its symbol and decimals, ranked by how many pools reference it |
+| `token_metadata` | `symbol()` / `decimals()` per token, decoded from the declared `[[calls]]` |
 | `global` | one-row network summary |
 
 ```sh
@@ -49,13 +68,22 @@ nuthatch sql --dir . "SELECT pool, swaps, volume_token0, volume_token1 FROM pool
 ```sh
 nuthatch init --from https://github.com/nightswatchhq/uniswap-v3   # clone this nest
 # point rpc_urls at your endpoint (a free Alchemy/Infura/dRPC key works great)
-nuthatch dev --dir . --backfill 10000000 --seal-direct --window 5000   # a recent slice
-nuthatch sql --dir .                                                    # query away
+nuthatch dev --dir . --backfill 10000000 --seal-direct --window 5000 \
+  --state-rpc https://<your-archive-endpoint>                       # a recent slice
+nuthatch sql --dir .                                                  # query away
 ```
 
-A **recent slice** (`--backfill N`) indexes pools created in that window and their activity — fast and
-free-RPC-friendly. A full-history, every-pool-since-launch backfill is a bigger job (a paid RPC tier or
-your own node); the workflow is identical.
+**`--state-rpc` is not optional here.** This nest declares `[[calls]]` to read each token's `symbol()`
+and `decimals()` (see below), and those are historical `eth_call`s pinned at the block the pool was
+created in, so they need an **archive** endpoint. Without the flag the nest refuses to start and says
+so. It is deliberately a flag rather than a `nuthatch.toml` field, because an archive URL usually
+carries an API key and the config is pinned into the nest's content address. Check yours first with
+`nuthatch doctor --rpc <url>`, which reports archive depth among other things.
+
+A **recent slice** (`--backfill N`) indexes pools created in that window and their activity. A
+full-history, every-pool-since-launch backfill is a much bigger job: the dominant cost is not the logs
+or the calls but one `eth_getBlockByNumber` per block containing a matching log, measured at roughly
+99% of the request bill. Budget for it, or run a slice.
 
 ## Parity — checked against the canonical Uniswap V3 subgraph
 

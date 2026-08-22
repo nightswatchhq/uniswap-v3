@@ -1,5 +1,5 @@
 {
-  "registry_hash": "0x9a0a4e5627071c1d2094679a9273d940ea444768ed519e91794db7740e0e10ca",
+  "registry_hash": "0xe41bafe1eb634cb392151b7de1cd0f2158b69b686749620f077c1241c2ad182e",
   "tables": [
     {
       "alias": "factory",
@@ -918,6 +918,302 @@
       "event": "Swap(address,address,int256,int256,uint160,uint128,int24)",
       "table": "pool__swap",
       "topic0": "0xc42079f94a6350d7e6235f29174924f928cc2ac818eb64fed8004e115fbcca67"
+    },
+    {
+      "alias": "token0_symbol",
+      "columns": [
+        {
+          "indexed": false,
+          "name": "block_number",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "block_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "block_timestamp",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "tx_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "log_index",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "address",
+          "sol_type": "implicit",
+          "storage": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_seq",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "calldata",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "result",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "reverted",
+          "sol_type": "bool",
+          "storage": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "content_address",
+          "sol_type": "bytes32",
+          "storage": "hash32"
+        }
+      ],
+      "kind": "call",
+      "selector": "0x",
+      "table": "token0_symbol"
+    },
+    {
+      "alias": "token0_decimals",
+      "columns": [
+        {
+          "indexed": false,
+          "name": "block_number",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "block_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "block_timestamp",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "tx_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "log_index",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "address",
+          "sol_type": "implicit",
+          "storage": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_seq",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "calldata",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "result",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "reverted",
+          "sol_type": "bool",
+          "storage": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "content_address",
+          "sol_type": "bytes32",
+          "storage": "hash32"
+        }
+      ],
+      "kind": "call",
+      "selector": "0x",
+      "table": "token0_decimals"
+    },
+    {
+      "alias": "token1_symbol",
+      "columns": [
+        {
+          "indexed": false,
+          "name": "block_number",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "block_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "block_timestamp",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "tx_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "log_index",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "address",
+          "sol_type": "implicit",
+          "storage": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_seq",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "calldata",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "result",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "reverted",
+          "sol_type": "bool",
+          "storage": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "content_address",
+          "sol_type": "bytes32",
+          "storage": "hash32"
+        }
+      ],
+      "kind": "call",
+      "selector": "0x",
+      "table": "token1_symbol"
+    },
+    {
+      "alias": "token1_decimals",
+      "columns": [
+        {
+          "indexed": false,
+          "name": "block_number",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "block_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "block_timestamp",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "tx_hash",
+          "sol_type": "implicit",
+          "storage": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "log_index",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "address",
+          "sol_type": "implicit",
+          "storage": "address"
+        },
+        {
+          "indexed": false,
+          "name": "_seq",
+          "sol_type": "implicit",
+          "storage": "u64"
+        },
+        {
+          "indexed": false,
+          "name": "calldata",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "result",
+          "sol_type": "bytes",
+          "storage": "bytes"
+        },
+        {
+          "indexed": false,
+          "name": "reverted",
+          "sol_type": "bool",
+          "storage": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "content_address",
+          "sol_type": "bytes32",
+          "storage": "hash32"
+        }
+      ],
+      "kind": "call",
+      "selector": "0x",
+      "table": "token1_decimals"
     }
   ]
 }

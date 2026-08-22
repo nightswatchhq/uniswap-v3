@@ -1,6 +1,6 @@
 ---
 name: nuthatch
-description: Query this self-hosted nuthatch nest on arbitrum-one — decoded events, balances, and read-only SQL. Use when asked about on-chain activity for these contracts.
+description: Query this self-hosted nuthatch nest on arbitrum-one - decoded events, balances, and read-only SQL. Use when asked about on-chain activity for these contracts.
 ---
 
 # Querying the nuthatch nest
@@ -8,7 +8,7 @@ description: Query this self-hosted nuthatch nest on arbitrum-one — decoded ev
 Contracts indexed on arbitrum-one:
 - `factory` = 0x1f98431c8ad98523631ae4a59f267346ea31f984
 
-Data is local — never call an external API for it.
+Data is local - never call an external API for it.
 
 ## Preferred: MCP
 If a `nuthatch` MCP server is configured, use its tools. Call `schema` first to learn the
